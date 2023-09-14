@@ -12,11 +12,6 @@ class _LoginViewState extends State<LoginView> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double screenHeight = size.height;
-    double screenWidth = size.width;
-    EdgeInsets devicePadding = MediaQuery.of(context).viewPadding;
-
     return Padding(
       padding: devicePadding,
       child: Scaffold(
