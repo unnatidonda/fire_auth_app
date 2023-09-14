@@ -72,7 +72,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       contentPadding: const EdgeInsets.all(12),
                       hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      if (formkey.currentState!.validate()) {
+                        debugPrint("is valid");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignUpScreen(),
+                          ),
+                        );
+                      } else {
+                        debugPrint("is not valid");
+                      }
+                    },
                   ),
                   SizedBox(
                     height: screenHeight / 40,

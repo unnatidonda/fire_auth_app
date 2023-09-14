@@ -116,7 +116,7 @@ class _LoginViewState extends State<LoginView> {
                       children: [
                         Text(
                           textAlign: TextAlign.center,
-                          ("login"),
+                          ("Home"),
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.white,
