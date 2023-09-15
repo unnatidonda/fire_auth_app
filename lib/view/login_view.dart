@@ -86,7 +86,11 @@ class _LoginViewState extends State<LoginView> {
                     height: screenHeight / 40,
                   ),
                   ElevatedButton(
-                    style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))), fixedSize: MaterialStatePropertyAll(Size(screenWidth / 1, screenHeight / 18)), backgroundColor: const MaterialStatePropertyAll(Colors.orange)),
+                    style: ButtonStyle(
+                      shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+                      fixedSize: MaterialStatePropertyAll(Size(screenWidth / 1, screenHeight / 18)),
+                      backgroundColor: const MaterialStatePropertyAll(Color(0xFF00AB6C)),
+                    ),
                     onPressed: () {
                       loginuser();
                       if (formkey.currentState!.validate()) {
@@ -121,7 +125,7 @@ class _LoginViewState extends State<LoginView> {
                     },
                     child: const Text(
                       "Sign Up",
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                   SizedBox(
