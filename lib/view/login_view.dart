@@ -1,4 +1,5 @@
 import 'package:fire_auth_app/view/sign_up_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -9,7 +10,11 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  User? userData;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,6 +42,7 @@ class _LoginViewState extends State<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextFormField(
+                    controller: emailController,
                     validator: (value) {
                       if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) {
                         return "Enter email id ";
@@ -61,6 +67,7 @@ class _LoginViewState extends State<LoginView> {
                     height: screenHeight / 40,
                   ),
                   TextFormField(
+                    controller: passwordController,
                     validator: (value) {
                       if (!RegExp(r"^[a-zA-Z0-9]{6}$").hasMatch(value!)) {
                         return "Enter Passcode";
@@ -99,15 +106,7 @@ class _LoginViewState extends State<LoginView> {
                     // onPressed: onPress ?? () {},
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        debugPrint("is valid");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignUpScreen(),
-                          ),
-                        );
-                      } else {
-                        debugPrint("is not valid");
+                        loginUser();
                       }
                     },
 
@@ -116,7 +115,7 @@ class _LoginViewState extends State<LoginView> {
                       children: [
                         Text(
                           textAlign: TextAlign.center,
-                          ("Home"),
+                          ("login"),
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.white,
@@ -127,6 +126,17 @@ class _LoginViewState extends State<LoginView> {
                       ],
                     ),
                   ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Create Account"),
+                  ),
                 ],
               ),
             ),
@@ -134,5 +144,27 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  loginUser() async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          )
+          .then((value) => {
+                debugPrint(value.user.toString()),
+                setState(() {}),
+              });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        debugPrint('No user found for that email. ------------------------------------->>');
+      } else if (e.code == 'wrong-password') {
+        debugPrint('Wrong password provided for that user. ------------------------------------->>');
+      }
+    } catch (e) {
+      debugPrint('$e ------------------------------------->>');
+    }
   }
 }

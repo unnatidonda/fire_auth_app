@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -8,7 +9,11 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  User? userData;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -54,6 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: screenHeight / 40,
                   ),
                   TextFormField(
+                    controller: emailController,
                     validator: (value) {
                       if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) {
                         return "Enter email id ";
@@ -90,6 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: screenHeight / 40,
                   ),
                   TextFormField(
+                    controller: passwordController,
                     validator: (value) {
                       if (!RegExp(r"^[a-zA-Z0-9]{6}$").hasMatch(value!)) {
                         return "Enter Passcode";
@@ -126,7 +133,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       // ),
                     ),
                     // onPressed: onPress ?? () {},
-                    onPressed: () {},
+                    onPressed: () {
+                      signup();
+                    },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -150,5 +159,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  signup() async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          )
+          .then((value) => {
+                debugPrint(value.user.toString()),
+                setState(() {}),
+              });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'week-password') {
+        debugPrint('The password provided is too weak. ------------------------------------->>');
+      } else if (e.code == 'wrong-password') {
+        debugPrint('The account already exists for that email. ------------------------------------->>');
+      }
+    } catch (e) {
+      debugPrint('$e ------------------------------------->>');
+    }
   }
 }
