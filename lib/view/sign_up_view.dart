@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'login_view.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -9,11 +11,11 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
+  User? userdata;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  User? userData;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,139 +23,145 @@ class _SignUpScreenState extends State<SignUpScreen> {
     double screenWidth = size.width;
     EdgeInsets devicePadding = MediaQuery.of(context).viewPadding;
 
-    return Padding(
-      padding: devicePadding,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "sign up screen",
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage("assets/images/Sign In.png"),
           ),
         ),
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(),
-          child: Form(
-            key: formkey,
-            child: Padding(
-              padding: EdgeInsets.all(screenWidth / 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(width: 0.8, color: Color(0x8EB3B3B3)),
-                      ),
-                      // contentPadding: const EdgeInsets.all(00),
-                      isDense: true,
-
-                      hintText: " Name ",
-                      contentPadding: const EdgeInsets.all(12),
-                      hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
+        child: Form(
+          key: formkey,
+          child: Padding(
+            padding: EdgeInsets.all(screenWidth / 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextField(
+                  // validator: (value) {
+                  //   if (!RegExp(
+                  //       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                  //       .hasMatch(value!)) {
+                  //     return "Enter email id ";
+                  //   }
+                  //   return null;
+                  // },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(width: 0.8, color: Color(0x8EB3B3B3)),
                     ),
-                    onTap: () {},
+                    // contentPadding: const EdgeInsets.all(00),
+                    isDense: true,
+                    labelText: "Name",
+                    hintText: "Enter Name ",
+                    contentPadding: const EdgeInsets.all(12),
+                    hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
                   ),
-                  SizedBox(
-                    height: screenHeight / 40,
-                  ),
-                  TextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) {
-                        return "Enter email id ";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(width: 0.8, color: Color(0x8EB3B3B3)),
-                      ),
-                      // contentPadding: const EdgeInsets.all(00),
-                      isDense: true,
-
-                      hintText: "Enter email ",
-                      contentPadding: const EdgeInsets.all(12),
-                      hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
+                  onTap: () {},
+                ),
+                SizedBox(
+                  height: screenHeight / 40,
+                ),
+                TextFormField(
+                  controller: emailcontroller,
+                  validator: (value) {
+                    if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) {
+                      return "Enter email id ";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(width: 0.8, color: Color(0x8EB3B3B3)),
                     ),
-                    onTap: () {
-                      if (formkey.currentState!.validate()) {
-                        debugPrint("is valid");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignUpScreen(),
-                          ),
-                        );
-                      } else {
-                        debugPrint("is not valid");
-                      }
-                    },
+                    // contentPadding: const EdgeInsets.all(00),
+                    isDense: true,
+                    labelText: "email",
+                    hintText: "Enter email ",
+                    contentPadding: const EdgeInsets.all(12),
+                    hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
                   ),
-                  SizedBox(
-                    height: screenHeight / 40,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    validator: (value) {
-                      if (!RegExp(r"^[a-zA-Z0-9]{6}$").hasMatch(value!)) {
-                        return "Enter Passcode";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(width: 0.8, color: Color(0x8EB3B3B3)),
-                      ),
-                      // contentPadding: const EdgeInsets.all(00),
-                      isDense: true,
-                      hintText: "Enter passcode ",
-                      contentPadding: const EdgeInsets.all(12),
-                      hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
+                  onTap: () {},
+                ),
+                SizedBox(
+                  height: screenHeight / 40,
+                ),
+                TextFormField(
+                  controller: passwordcontroller,
+                  validator: (value) {
+                    if (!RegExp(r"^[a-zA-Z0-9]{6}$").hasMatch(value!)) {
+                      return "Enter Passcode";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(width: 0.8, color: Color(0x8EB3B3B3)),
                     ),
-                    onTap: () {},
+                    // contentPadding: const EdgeInsets.all(00),
+                    isDense: true,
+                    labelText: "password",
+                    hintText: "Enter password ",
+                    contentPadding: const EdgeInsets.all(12),
+                    hintStyle: const TextStyle(color: Color(0xFFB3B3B3), fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Poppins"),
                   ),
-                  SizedBox(
-                    height: screenHeight / 10,
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: const MaterialStatePropertyAll(Color(0xFF00AB6C)),
-                      fixedSize: MaterialStatePropertyAll(
-                        Size(screenWidth / 0.1, screenHeight / 16),
-                      ),
-                      shape: MaterialStatePropertyAll(
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                      ),
-                      // fixedSize: MaterialStatePropertyAll(
-                      // Size(width: 10, height!),
-                      // ),
-                    ),
-                    // onPressed: onPress ?? () {},
-                    onPressed: () {
-                      signup();
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          textAlign: TextAlign.center,
-                          ("login"),
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Poppins",
-                          ),
+                  onTap: () {},
+                ),
+                SizedBox(
+                  height: screenHeight / 40,
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))), fixedSize: MaterialStatePropertyAll(Size(screenWidth / 1, screenHeight / 18)), backgroundColor: const MaterialStatePropertyAll(Colors.orange)),
+                  onPressed: () {
+                    signuser();
+                    if (formkey.currentState!.validate()) {
+                      debugPrint("is valid");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginView(),
                         ),
-                      ],
+                      );
+                    } else {
+                      debugPrint("is not valid");
+                    }
+                  },
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: screenHeight / 40,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginView(),
+                        ));
+                  },
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.orange),
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight / 20,
+                ),
+              ],
             ),
           ),
         ),
@@ -161,25 +169,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  signup() async {
+  signuser() async {
     try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text,
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailcontroller.text,
+            password: passwordcontroller.text,
           )
-          .then((value) => {
-                debugPrint(value.user.toString()),
-                setState(() {}),
-              });
+          .then(
+            (value) => (value) {
+              userdata = value.user;
+              debugPrint(value.user.toString());
+              setState(() {});
+            },
+          );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'week-password') {
-        debugPrint('The password provided is too weak. ------------------------------------->>');
-      } else if (e.code == 'wrong-password') {
-        debugPrint('The account already exists for that email. ------------------------------------->>');
+      if (e.code == 'weak-password') {
+        debugPrint('The password provided is too weak.------------------------------------------------------------------->>>');
+      } else if (e.code == 'email-already-in-use') {
+        debugPrint('The account already exists for that email.------------------------------------------------------------------->>>');
       }
     } catch (e) {
-      debugPrint('$e ------------------------------------->>');
+      debugPrint("$e ------------------------------------------------------------------->>>");
     }
   }
 }
