@@ -181,6 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           .then(
             (value) => (value) {
               userdata = value.user;
+              // userdata!.delete();
               debugPrint(value.user.toString());
               setState(() {});
             },
@@ -195,4 +196,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       debugPrint("$e ------------------------------------------------------------------->>>");
     }
   }
+
+  // @override
+  // void initState() {
+  //   FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+  //     if (user == null) {
+  //       print('User is currently signed out!');
+  //     } else {
+  //       print('User is signed in!');
+  //     }
+  //   });
+  // }
 }
