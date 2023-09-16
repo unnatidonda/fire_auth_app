@@ -197,14 +197,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  // @override
-  // void initState() {
-  //   FirebaseAuth.instance.idTokenChanges().listen((User? user) {
-  //     if (user == null) {
-  //       print('User is currently signed out!');
-  //     } else {
-  //       print('User is signed in!');
-  //     }
-  //   });
-  // }
+  @override
+  void initState() {
+    FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+  }
 }
