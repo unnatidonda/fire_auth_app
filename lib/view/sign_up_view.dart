@@ -181,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           .then(
             (value) => (value) {
               userdata = value.user;
-              // userdata!.delete();
+              userdata!.emailVerified;
               debugPrint(value.user.toString());
               setState(() {});
             },

@@ -1,3 +1,4 @@
+import 'package:fire_auth_app/view/home_view/home_view.dart';
 import 'package:fire_auth_app/view/sign_up_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController passwordcontroller = TextEditingController();
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
+  User? userdata;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -95,6 +99,7 @@ class _LoginViewState extends State<LoginView> {
                       loginuser();
                       if (formkey.currentState!.validate()) {
                         debugPrint("is valid");
+                        loginuser();
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(
@@ -144,15 +149,45 @@ class _LoginViewState extends State<LoginView> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(
-            email: emailcontroller.text,
-            password: passwordcontroller.text,
-          )
+        email: emailcontroller.text,
+        password: passwordcontroller.text,
+      )
           .then(
-            (value) => (value) {
-              debugPrint(value.user.toString());
-              setState(() {});
-            },
-          );
+        (value) {
+          debugPrint(value.user.toString());
+          userdata = value.user;
+          if (userdata!.emailVerified) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeView(),
+                ));
+          } else {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text("Email verification"),
+                      content: const Text("we send a verification"),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            value.user!.sendEmailVerification();
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Resend"),
+                        ),
+                      ],
+                    ));
+          }
+          setState(() {});
+        },
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         debugPrint('No user found for that email.------------------------------------------------------------------->>>');
