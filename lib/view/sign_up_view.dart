@@ -120,8 +120,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       backgroundColor: const MaterialStatePropertyAll(Color(0xFF00AB6C)),
                     ),
                     onPressed: () {
-                      signuser();
                       if (formkey.currentState!.validate()) {
+                        signuser();
                         debugPrint("is valid");
                         Navigator.push(
                           context,
@@ -181,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           .then(
             (value) => (value) {
               userdata = value.user;
-              userdata!.emailVerified;
+              // userdata!.emailVerified;
               debugPrint(value.user.toString());
               setState(() {});
             },
@@ -197,14 +197,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  @override
-  void initState() {
-    FirebaseAuth.instance.idTokenChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-      }
-    });
-  }
+  // @override
+  // void initState() {
+  //   FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+  //     if (user == null) {
+  //       print('User is currently signed out!');
+  //     } else {
+  //       print('User is signed in!');
+  //     }
+  //   });
+  // }
 }
